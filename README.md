@@ -91,9 +91,10 @@ Get-ChildItem
 Fortunately, it is straightforward to detect when a GPO is modified. If Directory Service Changes auditing is enabled, then the event ID 5136 will be generated
 
 ## Credentials in Shares
-There are plenty of tools available that can achieve this, such as PowerView's Invoke-ShareFinder. 
+Enumerating non-default network shares with [PowerView](https://github.com/PowerShellEmpire/PowerTools/tree/master/PowerView) Module Invoke-ShareFinder. 
 
 ```powershell
+Import-Module Powerview.ps1
 Invoke-ShareFinder -domain eagle.local -ExcludeStandard -CheckShareAccess
 ```
 
@@ -176,8 +177,26 @@ PS C:\Users\bob\Downloads> SearchUserClearTextInformation -Terms "pass"
 
 
 ## DCSync
+DCSync is an attack that threat agents utilize to impersonate a Domain Controller and perform replication with a targeted Domain Controller to extract password hashes from Active Directory. The attack can be performed both from the perspective of a user account or a computer, as long as they have the necessary permissions assigned, which are:
 
-*Coming soon...*
+Replicating Directory Changes
+Replicating Directory Changes All
+
+Steps:
+1. Run a Command Shell or Powershell as Admin:
+2.  Use [Mimikatz](https://github.com/gentilkiwi/mimikatz) for performing DCSync. We can run it by specifying the username whose password hash we want to obtain if the attack is successful, in this case, the user 'Administrator':
+
+`
+C:\Mimikatz>mimikatz.exe # lsadump::dcsync /domain:eagle.local /user:Administrator
+`
+
+3.  Copy Credentials (e.g. Hash NTLM value)
+
+It is possible to specify the /all parameter instead of a specific username, which will dump the hashes of the entire AD environment. We can perform pass-the-hash with the obtained hash and authenticate against any Domain Controller.
+
+
+*Detection*: Detecting DCSync is easy because each Domain Controller replication generates an event with the ID 4662. We can pick up abnormal requests immediately by monitoring for this event ID and checking whether the initiator account is a Domain Controller. 
+Either the property 1131f6aa-9c07-11d1-f79f-00c04fc2dcd2 or 1131f6ad-9c07-11d1-f79f-00c04fc2dcd2 is present in the event.
 
 ## Golden Ticket
 
