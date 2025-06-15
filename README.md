@@ -342,7 +342,9 @@ Case 2: Full control over a computer object can also be fruitful. If LAPS is use
 
 We can also use [ADACLScanner](https://github.com/canix1/ADACLScanner) to create reports of discretionary access control lists (DACLs) and system access control lists (SACLs).
 
-*Detection*:  When the SPN value gets added, an event with the ID 4738, "A user account was changed", is generated. However, this event does not demonstrate all modified user properties, including the SPN.
+*Detection*: Monitor for expensive, inefficient, or slow  LDAP Queries (Event Code 1644) and anomalous & large ammounts of Event Codes 4662 from a user.
+
+ When the SPN value gets added, an event with the ID 4738, "A user account was changed", is generated. However, this event does not demonstrate all modified user properties, including the SPN.
 
 Similarly, if Bob were to perform the second scenario, an event with ID 4742 would be generated, which is also unfortunately limited in the information it can provide; however, it notifies about the action that the user account Bob is compromised and used maliciously. 
 
