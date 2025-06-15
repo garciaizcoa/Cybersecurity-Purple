@@ -127,9 +127,11 @@ Function SearchUserClearTextInformation
 ```
 
 We will run the script to hunt for the string pass:
+
 `
 PS C:\Users\bob\Downloads> SearchUserClearTextInformation -Terms "pass"
 `
+
 *Detection*: Look for abnormal logons,  we would expect events with event ID 4624/4625 (failed and successful logon) and 4768 (Kerberos TGT requested).
 
 ## Credentials in Object Properties
