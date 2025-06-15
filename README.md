@@ -33,8 +33,7 @@ Alternatively, the captured TGS hashes can be cracked with John The Ripper:
 
 `sudo john spn.txt --fork=4 --format=krb5tgs --wordlist=passwords.txt --pot=results.pot`
 
-*Detection*
-When a TGS is requested, an event log with ID 4769 is generated.
+*Detection*: When a TGS is requested, an event log with ID 4769 is generated.
 
 ## AS-REProasting
 
