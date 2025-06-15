@@ -91,8 +91,46 @@ Get-ChildItem
 Fortunately, it is straightforward to detect when a GPO is modified. If Directory Service Changes auditing is enabled, then the event ID 5136 will be generated
 
 ## Credentials in Shares
+A simple PowerShell script can query the entire domain by looking for specific search terms/strings in the Description or Info fields:'
 
-*Coming soon...*
+```powershell
+Function SearchUserClearTextInformation
+{
+    Param (
+        [Parameter(Mandatory=$true)]
+        [Array] $Terms,
+
+        [Parameter(Mandatory=$false)]
+        [String] $Domain
+    )
+
+    if ([string]::IsNullOrEmpty($Domain)) {
+        $dc = (Get-ADDomain).RIDMaster
+    } else {
+        $dc = (Get-ADDomain $Domain).RIDMaster
+    }
+
+    $list = @()
+
+    foreach ($t in $Terms)
+    {
+        $list += "(`$_.Description -like `"*$t*`")"
+        $list += "(`$_.Info -like `"*$t*`")"
+    }
+
+    Get-ADUser -Filter * -Server $dc -Properties Enabled,Description,Info,PasswordNeverExpires,PasswordLastSet |
+        Where { Invoke-Expression ($list -join ' -OR ') } | 
+        Select SamAccountName,Enabled,Description,Info,PasswordNeverExpires,PasswordLastSet | 
+        fl
+}
+
+```
+
+We will run the script to hunt for the string pass:
+`
+PS C:\Users\bob\Downloads> SearchUserClearTextInformation -Terms "pass"
+`
+*Detection*: Look for abnormal logons,  we would expect events with event ID 4624/4625 (failed and successful logon) and 4768 (Kerberos TGT requested).
 
 ## Credentials in Object Properties
 
