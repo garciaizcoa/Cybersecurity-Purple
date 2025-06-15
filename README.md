@@ -60,7 +60,35 @@ To abuse GPP Passwords, we will use the Get-GPPPassword function from PowerSploi
 
 *Detection:* Once auditing is enabled, any access to the file will generate an Event with the ID 4663
 ## GPO Permissions/GPO Files
+Use PowerShell to retrieve GPO permissions:
 
+```powershell
+Import-Module GroupPolicy
+Get-GPPermission -Name "Default Domain Policy" -All
+```
+To add or remove GPO permissions:
+
+```powershell
+# Grant read access
+Set-GPPermission -Name "Default Domain Policy" -TargetName "Domain Users" -TargetType Group -PermissionLevel GpoRead
+
+# Remove permissions
+Set-GPPermission -Name "Default Domain Policy" -TargetName "Domain Users" -TargetType Group -PermissionLevel None
+```
+GPOs are stored in the SYSVOL share. You can manually inspect and edit files if needed:
+
+```powershell
+# Navigate to the GPO directory
+cd "\\domain.local\SYSVOL\domain.local\Policies"
+
+# List policy folders (each GPO has its own GUID folder)
+Get-ChildItem
+```
+
+> ⚠️ **Caution**: Direct editing of GPO files may lead to corruption or misconfiguration. Always test in a lab environment first.
+
+*Detection*:
+Fortunately, it is straightforward to detect when a GPO is modified. If Directory Service Changes auditing is enabled, then the event ID 5136 will be generated
 
 ## Credentials in Shares
 
