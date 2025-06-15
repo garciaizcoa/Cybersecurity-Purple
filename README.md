@@ -51,12 +51,16 @@ We can now use hashcat with the hash-mode (option -m) 18200 for AS-REPRoastable 
 *Detection*: When we executed Rubeus, an Event with ID 4768 was generated, signaling that a Kerberos Authentication ticket was generated
 
 ## GPP Passwords
+When Microsoft released it with the Windows Server 2008, Group Policy Preferences (GPP) introduced the ability to store and use credentials in several scenarios, all of which AD stores in the policies directory in SYSVOL. AD stores all group policies in \\<DOMAIN>\SYSVOL\<DOMAIN>\Policies\
 
-*Coming soon...*
+To abuse GPP Passwords, we will use the Get-GPPPassword function from PowerSploit, which automatically parses all XML files in the Policies folder in SYSVOL, picking up those with the cpassword property and decrypting them once detected:
 
+`PS C:\Users\bob\Downloads> Import-Module .\Get-GPPPassword.ps1`
+`PS C:\Users\bob\Downloads> Get-GPPPassword`
+
+*Detection:* Once auditing is enabled, any access to the file will generate an Event with the ID 4663
 ## GPO Permissions/GPO Files
 
-*Coming soon...*
 
 ## Credentials in Shares
 
