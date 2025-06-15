@@ -91,6 +91,46 @@ Get-ChildItem
 Fortunately, it is straightforward to detect when a GPO is modified. If Directory Service Changes auditing is enabled, then the event ID 5136 will be generated
 
 ## Credentials in Shares
+There are plenty of tools available that can achieve this, such as PowerView's Invoke-ShareFinder. 
+
+```powershell
+Invoke-ShareFinder -domain eagle.local -ExcludeStandard -CheckShareAccess
+```
+
+A few automated tools exist, such as [SauronEye](https://github.com/vivami/SauronEye), which can parse a collection of files and pick up matching words.
+
+Using Living Off the Land approach we can manualy parse files and match words with findstr. When running findstr, we will write a script that goes to a specified share and looks for keywords on various specified file extensions:
+
+```powershell
+# Define the UNC path to the share
+$sharePath = "\\\\Server01.eagle.local\\dev$"
+
+# File extensions to scan
+$fileTypes = @("*.bat", "*.cmd", "*.ini", "*.config")
+
+# Keyword to search for
+$searchKeyword = "pass"
+
+# Change to the network share
+Set-Location $sharePath
+
+# Loop through each file type and run the search
+foreach ($fileType in $fileTypes) {
+    Write-Host "Searching in file type: $fileType" -ForegroundColor Cyan
+    Get-ChildItem -Recurse -Include $fileType -ErrorAction SilentlyContinue |
+        ForEach-Object {
+            $filePath = $_.FullName
+            if (Select-String -Path $filePath -Pattern $searchKeyword -SimpleMatch -Quiet) {
+                Write-Host "[+] Potential credential found in: $filePath" -ForegroundColor Yellow
+            }
+        }
+}
+```
+
+
+*Detection*: Monitor successful logon with event ID 4624 for high priviledge accounts from unusual location.s (need to establish a baseline first)
+
+## Credentials in Object Properties
 A simple PowerShell script can query the entire domain by looking for specific search terms/strings in the Description or Info fields:'
 
 ```powershell
@@ -134,9 +174,6 @@ PS C:\Users\bob\Downloads> SearchUserClearTextInformation -Terms "pass"
 
 *Detection*: Look for abnormal logons,  we would expect events with event ID 4624/4625 (failed and successful logon) and 4768 (Kerberos TGT requested).
 
-## Credentials in Object Properties
-
-*Coming soon...*
 
 ## DCSync
 
