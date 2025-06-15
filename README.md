@@ -349,6 +349,8 @@ We can also use [ADACLScanner](https://github.com/canix1/ADACLScanner) to create
 Similarly, if Bob were to perform the second scenario, an event with ID 4742 would be generated, which is also unfortunately limited in the information it can provide; however, it notifies about the action that the user account Bob is compromised and used maliciously. 
 
 ## PKI - ESC1
+After SpectreOps released the research paper [Certified Pre-Owned](https://specterops.io/wp-content/uploads/sites/3/2022/06/Certified_Pre-Owned.pdf), Active Directory Certificate Services (AD CS) became one of the most favorite attack vectors for threat agents.
+
 The description of ESC1 is:
 
 Domain escalation via No Issuance Requirements + Enrollable Client Authentication/Smart Card Logon OID templates + CT_FLAG_ENROLLEE_SUPPLIES_SUBJECT.
