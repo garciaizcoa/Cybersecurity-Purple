@@ -107,24 +107,26 @@ Using Living Off the Land approach we can manualy parse files and match words wi
 $sharePath = "\\\\Server01.eagle.local\\dev$"
 
 # File extensions to scan
-$fileTypes = @("*.bat", "*.cmd", "*.ini", "*.config")
+$fileTypes = @("*.txt", "*.ini", "*.config", "*.xml", "*.json", "*.bat", "*.cmd", "*.ps1", "*.sh")
 
 # Keyword to search for
-$searchKeyword = "pass"
+$Keywords = @("password", "passwd", "pwd", "pass", "dbpass", "key", "secret", "token", "cred", "credentials", "auth", "userpass", "connectionstring", "login","software","admin","administrator","Adm","administrator2")
 
 # Change to the network share
 Set-Location $sharePath
 
-# Loop through each file type and run the search
+# Loop through each keyword and file type and run the search
+foreach ($keyword in $keywords) {
 foreach ($fileType in $fileTypes) {
     Write-Host "Searching in file type: $fileType" -ForegroundColor Cyan
     Get-ChildItem -Recurse -Include $fileType -ErrorAction SilentlyContinue |
         ForEach-Object {
             $filePath = $_.FullName
-            if (Select-String -Path $filePath -Pattern $searchKeyword -SimpleMatch -Quiet) {
+            if (Select-String -Path $filePath -Pattern $Keyword -SimpleMatch -Quiet) {
                 Write-Host "[+] Potential credential found in: $filePath" -ForegroundColor Yellow
             }
         }
+    }
 }
 ```
 
