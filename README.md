@@ -398,4 +398,9 @@ After successful authentication, we will be able to list the content of the C$ s
 
 *Detection*: When the CA generates the certificate, two events will be logged, one for the received request and one for the issued certificate, if it succeeds. Those events have the IDs of 4886 and 4887.
 
-Finally, if you recall, in the attack, we used the obtained certificate for authentication and obtained a TGT; AD will log this request with the event ID 4768, which will specifically have information about the logon attempt with a certificate:
+Finally, if you recall, in the attack, we used the obtained certificate for authentication and obtained a TGT; AD will log this request with the event ID 4768, which will specifically have information about the logon attempt with a certificate.
+
+
+## PKI - ESC8
+
+*Coming soon...*
