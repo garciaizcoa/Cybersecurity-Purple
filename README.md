@@ -185,7 +185,10 @@ Replicating Directory Changes
 Replicating Directory Changes All
 
 Steps:
-1. Run a Command Shell or Powershell as Admin:
+1. Run a Command Shell or Powershell as Admin (To be able to run DCSync, a user needs the "Replicating Directory Changes" and "Replicating Directory Changes All" permissions in Active Directory.):
+
+`runas /user:eagle.local\rocky powershell.exe`
+
 2.  Use [Mimikatz](https://github.com/gentilkiwi/mimikatz) for performing DCSync. We can run it by specifying the username whose password hash we want to obtain if the attack is successful, in this case, the user 'Administrator':
 
 `
