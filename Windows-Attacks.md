@@ -400,6 +400,29 @@ After successful authentication, we will be able to list the content of the C$ s
 
 Finally, if you recall, in the attack, we used the obtained certificate for authentication and obtained a TGT; AD will log this request with the event ID 4768, which will specifically have information about the logon attempt with a certificate.
 
+## PKI - ESC2
+
+*Coming soon...*
+
+## PKI - ESC3
+
+*Coming soon...*
+
+## PKI - ESC4
+
+*Coming soon...*
+
+## PKI - ESC5
+
+*Coming soon...*
+
+## PKI - ESC6
+
+*Coming soon...*
+
+## PKI - ESC7
+
+*Coming soon...*
 
 ## PKI - ESC8
 
