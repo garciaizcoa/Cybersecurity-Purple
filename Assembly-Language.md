@@ -66,4 +66,12 @@ gef➤  x/s 0x402000
 gef➤  registers
 
 Write values to addresses:
+
 gef➤  help patch
+
+
+Searchable Linux Syscall table
+
+https://filippo.io/linux-syscall-table/
+
+
