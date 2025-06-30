@@ -16,6 +16,14 @@ chmod 777 mov
 
 ### Disassemble executable file:
 
+https://docs.pwntools.com/en/stable/commandline.html
+
+sudo pip3 install pwntools
+
+pwn asm 'push rax'  -c 'amd64'
+
+pwn disasm '50' -c 'amd64'
+
 objdump -M intel -d mov
 
 objdump -sj .data mov
