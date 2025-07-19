@@ -4,7 +4,7 @@
 ## Sections
 - [Suricata](#suricata-fundamentals)
 - [Snort](#snort-fundamentals)
-- [Zeek](#zeek-fundaments)
+- [Zeek](#zeek-fundamentals)
 
 
 ## Suricata Fundamentals 
