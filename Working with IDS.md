@@ -1,5 +1,11 @@
 
-# Suricata 
+# Working with IDS/IPS 
+
+## Sections
+- [Suricata](#suricata-fundamentals)
+- [Snort](#snort-fundaments)
+- [Zeek](#zeek-fundaments)
+
 
 ## Suricata Fundamentals 
 
@@ -157,8 +163,65 @@ alert tls any any -> any any (msg:"Sliver C2 SSL"; ja3.hash; content:"473cd7cb9f
 
 The Suricata rule above is designed to detect certain variations of Sliver whenever it identifies a TLS connection with a specific JA3 hash.
 
+## Snort Fundamentals
+
+Let's browse the snort.lua file residing in this section's target as follows.
+
+```bash
+rickyjojo@htb[/htb]$ sudo more /root/snorty/etc/snort/snort.lua
+```
+
+Enabling and fine-tuning Snort modules is a significant aspect of the configuration process. To explore the complete list and get a brief description of all Snort 3 modules, you can use the following command.
+
+```bash
+rickyjojo@htb[/htb]$ snort --help-modules
+```
+
+Passing (and validating) configuration files to Snort can be done as follows.
+
+```bash
+rickyjojo@htb[/htb]$ snort -c /root/snorty/etc/snort/snort.lua --daq-dir /usr/local/lib/daq
+```
 
 
+### Snort Inputs
+
+To observe Snort in action, the easiest method is to execute it against a packet capture file. By providing the name of the pcap file as an argument to the -r option in the command line, Snort will process the file accordingly.
+
+```bash
+rickyjojo@htb[/htb]$ sudo snort -c /root/snorty/etc/snort/snort.lua --daq-dir /usr/local/lib/daq -r /home/htb-student/pcaps/icmp.pcap
+```
+
+Snort also has the capability to listen on active network interfaces. To specify this behavior, you can utilize the -i option followed by the names of the interfaces on which Snort should run.
+
+```bash
+rickyjojo@htb[/htb]$ sudo snort -c /root/snorty/etc/snort/snort.lua --daq-dir /usr/local/lib/daq -i ens160
+```
+
+### Configurating Snort 
+
+In Snort deployments, we have flexibility in managing rules. It's possible to place rules (for example, local.rules residing at /home/htb-student) directly within the snort.lua configuration file using the ips module as follows.
+
+```bash
+rickyjojo@htb[/htb]$ sudo vim /root/snorty/etc/snort/snort.lua
+```
+
+Alerts: When rules are configured, it is necessary to enable alerting (using the -A option) to view the details of detection events. There are multiple types of alert outputs available, including:
+
+-A cmg: This option combines -A fast -d -e and displays alert information along with packet headers and payload.
+-A u2: This option is equivalent to -A unified2 and logs events and triggering packets in a binary file, which can be used for post-processing with other tools.
+-A csv: This option outputs fields in comma-separated value format, providing customization options and facilitating pcap analysis.
+To discover the available alert types, we can execute the following command.
+
+```bash
+rickyjojo@htb[/htb]$ snort --list-plugins | grep logger
+```
+
+The same command but using a .rules files that may not be "included" in snort.lua is the following.
+
+```bash
+rickyjojo@htb[/htb]$ sudo snort -c /root/snorty/etc/snort/snort.lua --daq-dir /usr/local/lib/daq -r /home/htb-student/pcaps/icmp.pcap -R /home/htb-student/local.rules -A cmg
+```
 
 
 
