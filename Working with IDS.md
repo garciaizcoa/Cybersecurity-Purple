@@ -1,8 +1,6 @@
 
 # Suricata 
 
----
-
 ## Suricata Fundamentals 
 
 
@@ -81,7 +79,9 @@ Key features that bolster Suricata's effectiveness include:
 + File extraction
 + Advanced protocol inspection
 + Multitenancy
-  
+
+---
+
 ### Suricata Rule Development Example 1: Detecting PowerShell Empire
 
 
