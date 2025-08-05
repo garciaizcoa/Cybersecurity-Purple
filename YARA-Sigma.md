@@ -68,6 +68,36 @@ vol.py -f /home/htb-student/MemoryDumps/compromised_system.raw yarascan -U "www.
 ### YARA for Web 
 [Unpac.Me](https://unpac.me/) is tool tailored for malware unpacking.
 
+# Sigma
 
+[pySigma](https://github.com/SigmaHQ/pySigma) is the go-to option for rule translation
+
+[Sigma Specifications](https://github.com/SigmaHQ/sigma/wiki/Specification) 
+
+### Manually Developing a Sigma Rule
+
+Suppose that we wanted to convert our Sigma rule into a PowerShell (Get-WinEvent) query. This could have been accomplished with the help of sigmac as follows.
+
+```bash
+PS C:\\Tools\\sigma-0.21\\tools> python sigmac -t powershell 'C:\\Rules\\sigma\\proc_access_win_lsass_access.yml'
+```
+
+### Hunting Evil with Sigma (Chainsaw Edition)
+
+Filter Windows Event Logs without access to a SIEM, Sigma rules combined with tools like [Chainsaw](https://github.com/WithSecureLabs/chainsaw) and [Zircolite](https://github.com/wagga40/Zircolite). Both tools allow us to use Sigma rules to scan not just one, but multiple EVTX files concurrently, offering a broader and more comprehensive scan in a very efficient manner.
+
+Using chainsaw to hunt with sigma:
+
+```bash
+.\\chainsaw_x86_64-pc-windows-msvc.exe hunt C:\\Events\\YARASigma\\lab_events_5.evtx -s C:\Tools\chainsaw\sigma\rules\windows\powershell\powershell_script\posh_ps_win_defender_exclusions_added.yml --mapping .\\mappings\\sigma-event-logs-all-new.yml
+```
+
+### Hunting Evil with Sigma (Splunk Edition)
+
+We can translate a Sigma rule into a Splunk search with sigmac:
+
+```bash
+python sigmac -t splunk C:\\Tools\\chainsaw\\sigma\\rules\\windows\\process_access\\proc_access_win_lsass_dump_comsvcs_dll.yml -c .\\config\\splunk-windows.yml
+```
 
 
