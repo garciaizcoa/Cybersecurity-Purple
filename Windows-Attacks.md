@@ -356,6 +356,8 @@ Similarly, if Bob were to perform the second scenario, an event with ID 4742 wou
 ## PKI - ESC1
 After SpectreOps released the research paper [Certified Pre-Owned](https://specterops.io/wp-content/uploads/sites/3/2022/06/Certified_Pre-Owned.pdf), Active Directory Certificate Services (AD CS) became one of the most favorite attack vectors for threat agents.
 
+<img width="1238" height="511" alt="image" src="https://github.com/user-attachments/assets/3e9de8fe-8679-469a-adf8-28b09b80b571" />
+
 The description of ESC1 is:
 
 Domain escalation via No Issuance Requirements + Enrollable Client Authentication/Smart Card Logon OID templates + CT_FLAG_ENROLLEE_SUPPLIES_SUBJECT.
